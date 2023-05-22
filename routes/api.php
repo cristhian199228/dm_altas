@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UbigeoController;
 use App\Http\Controllers\Api\AutenticacionController;
-
+use App\Http\Controllers\Api\AtencionMedicaController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -23,5 +23,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/departamentosReniec', [UbigeoController::class, 'departamentosReniec']);
 Route::get('/provinciasReniec', [UbigeoController::class, 'provinciasReniec']);
 Route::get('/distritosReniec', [UbigeoController::class, 'distritosReniec']);
+Route::get('/fetchAtencion/{id}', [AtencionMedicaController::class, 'fetchAtencion']);
 
 Route::post('/loginLugarNacimiento', [AutenticacionController::class, 'loginLugarNacimiento']);
