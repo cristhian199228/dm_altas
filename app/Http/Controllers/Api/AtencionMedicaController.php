@@ -11,7 +11,6 @@ class AtencionMedicaController extends Controller
     //
     public function fetchAtencion($id)
     {
-        //return $id;
         $atencion = AtencionDescanso::where('paciente_id',$id)->get();
         return $atencion;
     }
