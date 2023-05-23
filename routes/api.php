@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UbigeoController;
 use App\Http\Controllers\Api\AutenticacionController;
 use App\Http\Controllers\Api\AtencionMedicaController;
+use App\Http\Controllers\Api\DescansoMedicoController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -24,5 +25,7 @@ Route::get('/departamentosReniec', [UbigeoController::class, 'departamentosRenie
 Route::get('/provinciasReniec', [UbigeoController::class, 'provinciasReniec']);
 Route::get('/distritosReniec', [UbigeoController::class, 'distritosReniec']);
 Route::get('/fetchAtencion/{id}', [AtencionMedicaController::class, 'fetchAtencion']);
+Route::post('/storeAtencion', [AtencionMedicaController::class, 'storeAtencion']);
+Route::post('/uploadDescansoMedico', [DescansoMedicoController::class, 'uploadDescansoMedico']);
 
 Route::post('/loginLugarNacimiento', [AutenticacionController::class, 'loginLugarNacimiento']);
