@@ -7,8 +7,7 @@ use App\Models\DescansoMedico;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Dompdf\Dompdf;
-use Dompdf\Options;
+use Intervention\Image\Facades\Image;
 
 class DescansoMedicoController extends Controller
 {
@@ -22,36 +21,6 @@ class DescansoMedicoController extends Controller
 
         //asignar nombre unico al archivo
 
-
-        if ($request->file('file')->extension() != 'pdf') {
-
-            $image = $request->file('file');
-
-            // Ruta de almacenamiento temporal para la imagen
-            $imagePath = $image->getPathname();
-            // Crea una instancia de Dompdf con las opciones
-            $options = new Options();
-            $options->set('isRemoteEnabled', true); // Habilita la carga de imágenes remotas
-            $dompdf = new Dompdf($options);
-
-            // Genera el contenido HTML con la imagen
-            $html = '<img src="' . $imagePath . '">';
-
-            // Carga el contenido HTML en Dompdf
-            $dompdf->loadHtml($html);
-
-            // Renderiza el PDF
-            $dompdf->render();
-
-            // Genera el nombre del archivo PDF
-            $filename = 'image.pdf';
-
-            // Guarda el archivo PDF en la carpeta public
-            $output = $dompdf->output();
-            $storagePath = storage_path('app/public');
-            $pdfPath = $storagePath . '/' . $filename;
-            file_put_contents($pdfPath, $output);
-        }
         $id_evidencia = $request->id_atencion;
         $file = $request->file('file');
         $fileName = Str::random(10);
@@ -73,5 +42,13 @@ class DescansoMedicoController extends Controller
         return response([
             "message" => 'Foto subida correctamente'
         ]);
+    }
+    public function show(string $path)
+    {
+        //
+        $file = '/DM_ALTAS/DM/' . $path;
+        $file = Storage::disk('ftp')->get($file);
+
+        return Image::make($file)->response();
     }
 }

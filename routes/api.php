@@ -27,5 +27,6 @@ Route::get('/distritosReniec', [UbigeoController::class, 'distritosReniec']);
 Route::get('/fetchAtencion/{id}', [AtencionMedicaController::class, 'fetchAtencion']);
 Route::post('/storeAtencion', [AtencionMedicaController::class, 'storeAtencion']);
 Route::post('/uploadDescansoMedico', [DescansoMedicoController::class, 'uploadDescansoMedico']);
+Route::get('/showdm/{path}',  [DescansoMedicoController::class, 'show']);
 
 Route::post('/loginLugarNacimiento', [AutenticacionController::class, 'loginLugarNacimiento']);

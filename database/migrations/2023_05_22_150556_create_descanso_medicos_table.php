@@ -16,6 +16,8 @@ return new class extends Migration
             $table->id();
             $table->datetime('fecha_inicio')->nullable();
             $table->datetime('fecha_fin')->nullable();
+            $table->datetime('fecha_inicio_paciente')->nullable();
+            $table->datetime('fecha_fin_paciente')->nullable();
             $table->string('ruta');
             $table->string('cie10')->nullable();
             $table->string('numero_certificado')->nullable();

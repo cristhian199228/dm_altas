@@ -85,13 +85,25 @@ class AutenticacionController extends Controller
 
         $paciente = Paciente::firstWhere("numero_documento", $data['numero']);
         if (!$paciente) {
-            try {
-                $paciente = RegistroPacienteService::registrar($data['numero']);
-            } catch (\Exception $exception) {
-                return response([
-                    "message" => "Error al registrar paciente",
-                ], 400);
-            }
+            $paciente_mediweb = Paciente::select('idpaciente', 'dni2', 'nombres', 'apellido_paterno', 'apellido_materno', 'idtipodocumento', 'telefono', 'fechanacimiento', 'sexo', 'idempresa')
+                ->where('dni2',  $data['numero'])->first();
+            $comprobante_mediweb = Comprobante::select('idsubcontrata')
+                ->where('idpaciente', $paciente_mediweb->idpaciente)->orderBy('fecha', 'desc')->first();
+            $empresa_mediweb = EmpresaMediweb::select('descripcion', 'ruc', 'nombrecomercial')
+                ->where('idempresa',  $comprobante_mediweb->idsubcontrata)->first();
+            $empresa = Empresa::where('ruc', $empresa_mediweb->ruc)->first();
+
+            $paciente = new PacienteIsos();
+            $paciente->estado = 1;
+            $paciente->celular =  $paciente_mediweb->telefono;
+            $paciente->nombres = $paciente_mediweb->nombres;
+            $paciente->apellido_paterno = $paciente_mediweb->apellido_paterno;
+            $paciente->apellido_materno = $paciente_mediweb->apellido_materno;
+            $paciente->tipo_documento = $paciente_mediweb->idtipodocumento;
+            $paciente->numero_documento = $paciente_mediweb->dni2;
+            $paciente->fecha_nacimiento = $paciente_mediweb->fechanacimiento;
+            $paciente->idempresa = $comprobante_mediweb->idsubcontrata;
+            $paciente->save();
         }
 
         if (!$paciente->validacionReniec()->exists()) {
