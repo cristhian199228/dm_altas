@@ -28,5 +28,7 @@ Route::get('/fetchAtencion/{id}', [AtencionMedicaController::class, 'fetchAtenci
 Route::post('/storeAtencion', [AtencionMedicaController::class, 'storeAtencion']);
 Route::post('/uploadDescansoMedico', [DescansoMedicoController::class, 'uploadDescansoMedico']);
 Route::get('/showdm/{path}',  [DescansoMedicoController::class, 'show']);
+Route::get('/fetchDocumentosRequeridos', [DescansoMedicoController::class, 'fetchDocumentosRequeridos']);
+Route::post('/storeConsentimiento', [DescansoMedicoController::class, 'storeConsentimiento']);
 
 Route::post('/loginLugarNacimiento', [AutenticacionController::class, 'loginLugarNacimiento']);
