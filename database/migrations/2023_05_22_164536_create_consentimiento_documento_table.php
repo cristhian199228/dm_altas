@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use App\Models\DocumentoRequerido;
-use  App\Models\AtencionDescanso;
+use App\Models\Consentimiento;
 
 return new class extends Migration
 {
@@ -13,9 +13,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('atencion_documento', function (Blueprint $table) {
+        Schema::create('consentimiento_documento', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(AtencionDescanso::class)->constrained();
+            $table->foreignIdFor(Consentimiento::class)->constrained();
             $table->foreignIdFor(DocumentoRequerido::class)->constrained();
             $table->timestamps();
         });
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('atencion_documento');
+        Schema::dropIfExists('consentimiento_documento');
     }
 };

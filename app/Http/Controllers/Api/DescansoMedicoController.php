@@ -68,7 +68,6 @@ class DescansoMedicoController extends Controller
         $descanso->centro_medico =  $request->centro_medico;
         $descanso->establecimiento_intervencion_quirurgica = $request->centro_quirurgico;
         $descanso->save();
- 
 
         $consentimiento = new Consentimiento();
         $consentimiento->atencion_descanso_id = $request->atencion_id;
@@ -79,6 +78,11 @@ class DescansoMedicoController extends Controller
         $consentimiento->declaracion_veracidad = 1;
         $consentimiento->estado = 1;
         $consentimiento->save();
+
+        return response([
+            "message" => 'Consentimiento grabado correctamente'
+        ]);
+
         /* $foto = new DescansoMedico();
         $foto->atencion_descanso_id = $id_evidencia;
         $foto->ruta = $unique_name;

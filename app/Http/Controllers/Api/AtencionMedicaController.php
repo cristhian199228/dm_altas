@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\AtencionDescanso;
+use App\Models\DescansoMedico;
 
 class AtencionMedicaController extends Controller
 {
@@ -27,10 +28,16 @@ class AtencionMedicaController extends Controller
                 "message" => "Existe una atencion en proceso"
             ]);
         }
+
         $atencion = new AtencionDescanso();
         $atencion->paciente_id  = $request['id_paciente'];
         $atencion->estado  = 0;
         $atencion->save();
+
+     /*    $descanso = new DescansoMedico();
+        $descanso->atencion_descanso_id  = $atencion->id;
+        $descanso->save();
+ */
         return response([
             "message" => "Atencion Creada Exitosamente",
             "data" => $atencion
