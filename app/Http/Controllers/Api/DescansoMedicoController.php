@@ -61,16 +61,15 @@ class DescansoMedicoController extends Controller
     public function storeConsentimiento(Request $request)
     {
         $descanso = DescansoMedico::where('atencion_descanso_id', $request->atencion_id)->latest()->first();
-        $descanso->fecha_inicio =  $request->date[0];
-        $descanso->fecha_fin = $request->date[1];
-        $descanso->medico_emisor =  $request->nombre_medico;
-        $descanso->motivo =  $request->motivo_descanso_medico;
-        $descanso->centro_medico =  $request->centro_medico;
-        $descanso->establecimiento_intervencion_quirurgica = $request->centro_quirurgico;
-        $descanso->save();
-
+        
         $consentimiento = new Consentimiento();
+        $consentimiento->fecha_inicio =  $request->date[0];
+        $consentimiento->fecha_fin = $request->date[1];
+        $consentimiento->medico_emisor =  $request->nombre_medico;
+        $consentimiento->motivo =  $request->motivo_descanso_medico;
         $consentimiento->atencion_descanso_id = $request->atencion_id;
+        $consentimiento->centro_medico =  $request->centro_medico;
+        $consentimiento->establecimiento_intervencion_quirurgica = $request->centro_quirurgico;
         if ($request->firma) {
             $base64Image = trim($request->firma);
             $consentimiento->firma = $base64Image;
