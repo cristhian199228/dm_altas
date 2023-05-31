@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\Api\AtencionDescansoController;
+use App\Http\Controllers\Api\AutenticacionController;
+use App\Http\Controllers\Api\DescansoMedicoController;
+use App\Http\Controllers\Api\UbigeoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\UbigeoController;
-use App\Http\Controllers\Api\AutenticacionController;
-use App\Http\Controllers\Api\AtencionMedicaController;
-use App\Http\Controllers\Api\DescansoMedicoController;
+use App\Http\Controllers\Api\EnfermedadController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -24,11 +26,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/departamentosReniec', [UbigeoController::class, 'departamentosReniec']);
 Route::get('/provinciasReniec', [UbigeoController::class, 'provinciasReniec']);
 Route::get('/distritosReniec', [UbigeoController::class, 'distritosReniec']);
-Route::get('/fetchAtencion/{id}', [AtencionMedicaController::class, 'fetchAtencion']);
-Route::post('/storeAtencion', [AtencionMedicaController::class, 'storeAtencion']);
 Route::post('/uploadDescansoMedico', [DescansoMedicoController::class, 'uploadDescansoMedico']);
 Route::get('/showdm/{path}',  [DescansoMedicoController::class, 'show']);
 Route::get('/fetchDocumentosRequeridos', [DescansoMedicoController::class, 'fetchDocumentosRequeridos']);
 Route::post('/storeConsentimiento', [DescansoMedicoController::class, 'storeConsentimiento']);
 
 Route::post('/loginLugarNacimiento', [AutenticacionController::class, 'loginLugarNacimiento']);
+
+Route::apiResource('atencionDescanso', AtencionDescansoController::class);
+
+Route::get('/enfermedades/search', [EnfermedadController::class, 'search']);

@@ -4,8 +4,60 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6479edd20baa5f467a52acaaedf41877",
+    "content-hash": "1c2ff89149083a463df6322148ade7f2",
     "packages": [
+        {
+            "name": "ajcastro/searchable",
+            "version": "v2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ajcastro/searchable.git",
+                "reference": "6d4e9ff6225f302bf8a4433f8aa10a2c05742cf9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ajcastro/searchable/zipball/6d4e9ff6225f302bf8a4433f8aa10a2c05742cf9",
+                "reference": "6d4e9ff6225f302bf8a4433f8aa10a2c05742cf9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^6.0",
+                "phpunit/phpunit": "9.5.x-dev"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "AjCastro\\Searchable\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Arjon Jason Castro",
+                    "email": "ajcastro29@gmail.com"
+                }
+            ],
+            "description": "Pattern-matching search for Laravel eloquent models.",
+            "keywords": [
+                "eloquent-search",
+                "laravel",
+                "laravel-package",
+                "pattern-matching-search",
+                "query",
+                "query-builder"
+            ],
+            "support": {
+                "issues": "https://github.com/ajcastro/searchable/issues",
+                "source": "https://github.com/ajcastro/searchable/tree/v2.0.0"
+            },
+            "time": "2021-07-25T13:50:42+00:00"
+        },
         {
             "name": "barryvdh/laravel-dompdf",
             "version": "v2.0.1",
