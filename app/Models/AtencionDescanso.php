@@ -13,8 +13,4 @@ class AtencionDescanso extends Model
     {
         return $this->hasMany(DescansoMedico::class);
     }
-    public function Consentimientos()
-    {
-        return $this->hasMany(Consentimiento::class);
-    }
 }

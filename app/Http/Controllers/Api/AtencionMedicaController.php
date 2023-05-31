@@ -13,8 +13,7 @@ class AtencionMedicaController extends Controller
     public function fetchAtencion($id)
     {
         $atencion = AtencionDescanso::where('paciente_id', $id)
-            ->with('DescansosMedicos')
-            ->with('Consentimientos')
+            ->with('DescansosMedicos.Consentimientos')
             ->get();
         return $atencion;
     }
