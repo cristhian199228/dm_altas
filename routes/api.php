@@ -35,11 +35,8 @@ Route::get('/fetchDocumentosRequeridos', [DescansoMedicoController::class, 'fetc
 Route::post('/storeConsentimiento', [DescansoMedicoController::class, 'storeConsentimiento']);
 Route::get('/showConsentimientoPdf/{id}', [DescansoMedicoController::class, 'showConsentimientoPdf']);
 Route::get('/fetchAtencion/{id}', [AtencionMedicaController::class, 'fetchAtencion']);
-
 Route::post('/loginLugarNacimiento', [AutenticacionController::class, 'loginLugarNacimiento']);
-
 Route::apiResource('atencionDescanso', AtencionDescansoController::class);
 Route::apiResource('evidencias', EvidenciaController::class);
 Route::apiResource('seguimientos', SeguimientoController::class);
-
 Route::get('/enfermedades/search', [EnfermedadController::class, 'search']);
