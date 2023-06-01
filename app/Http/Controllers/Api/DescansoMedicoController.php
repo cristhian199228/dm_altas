@@ -67,7 +67,7 @@ class DescansoMedicoController extends Controller
         $consentimiento->fecha_fin = $request->date[1];
         $consentimiento->medico_emisor =  $request->nombre_medico;
         $consentimiento->motivo =  $request->motivo_descanso_medico;
-        $consentimiento->atencion_descanso_id = $request->atencion_id;
+        $consentimiento->descanso_medico_id = $descanso->id;
         $consentimiento->centro_medico =  $request->centro_medico;
         $consentimiento->establecimiento_intervencion_quirurgica = $request->centro_quirurgico;
         if ($request->firma) {

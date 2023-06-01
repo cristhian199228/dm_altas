@@ -12,6 +12,10 @@ class AtencionDescanso extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'created_at' => 'datetime:d/m/Y'
+    ];
+
     public function descansosMedicos(): HasMany
     {
         return $this->hasMany(DescansoMedico::class);
