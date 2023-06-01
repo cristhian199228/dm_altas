@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\DecisionMedica;
 use App\Http\Controllers\Controller;
 use App\Models\Seguimiento;
 use Illuminate\Http\Request;
@@ -13,7 +14,10 @@ class SeguimientoController extends Controller
      */
     public function index()
     {
-        //
+        return Seguimiento::query()
+            ->with('atencion.paciente', 'atencion.ultimoDescansoMedico')
+            ->latest('fecha_seguimiento')
+            ->paginate(15);
     }
 
     /**
@@ -29,7 +33,7 @@ class SeguimientoController extends Controller
      */
     public function show(Seguimiento $seguimiento)
     {
-        return $seguimiento;
+        return $seguimiento->load('atencion.paciente');
     }
 
     /**
@@ -37,7 +41,31 @@ class SeguimientoController extends Controller
      */
     public function update(Request $request, Seguimiento $seguimiento)
     {
-        //
+        $data = $request->validate([
+            'comunicacion' => '',
+            'informacion_suministrada' => '',
+            'fecha_inicio_sintomas' => '',
+            'motivo_seguimiento' => '',
+            'motivo_seguimiento_otros' => '',
+            'decision_medica' => '',
+            'fecha_seguimiento' => '',
+            'comentarios' => ''
+        ]);
+        $seguimiento->update($data);
+
+        if ($data['decision_medica'] === 2) {
+            $nuevo = new Seguimiento();
+            $nuevo->atencion_descanso_id = $seguimiento->atencion_descanso_id;
+            $nuevo->fecha_seguimiento = $data['fecha_seguimiento'];
+            $nuevo->comunicacion = $data['comunicacion'];
+            $nuevo->motivo_seguimiento = $data['motivo_seguimiento'];
+            $nuevo->decision_medica = $data['decision_medica'];
+            $nuevo->save();
+        }
+
+        $seguimiento->fresh();
+
+        return $seguimiento;
     }
 
     /**

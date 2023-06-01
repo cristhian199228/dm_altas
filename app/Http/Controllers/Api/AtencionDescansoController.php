@@ -58,7 +58,7 @@ class AtencionDescansoController extends Controller
      */
     public function show(AtencionDescanso $atencionDescanso)
     {
-        return $atencionDescanso->load('descansosMedicos', 'paciente', 'evidencias', 'seguimientos', 'anammesis');
+        return $atencionDescanso->load('descansosMedicos', 'paciente', 'evidencias', 'seguimientos', 'anammesis.enfermedad');
     }
 
     /**
@@ -70,8 +70,8 @@ class AtencionDescansoController extends Controller
         //Validar informacion
         $data = $request->validate([
             'paciente' => '',
-            'seguimiento' => '',
-            'anammesis' => ''
+            'anammesis' => '',
+            'descansos' => ''
         ]);
 
         DB::transaction(function () use ($data, $atencionDescanso) {
@@ -80,8 +80,8 @@ class AtencionDescansoController extends Controller
                 "celular" => $data['paciente']['celular'],
                 "nro_registro" => $data['paciente']['nro_registro'],
             ]);
-            $atencionDescanso->seguimientos()->create($data['seguimiento']);
             $atencionDescanso->anammesis()->createMany($data['anammesis']);
+
         });
 
         $atencionDescanso->refresh();
