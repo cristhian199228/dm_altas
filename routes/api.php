@@ -3,12 +3,12 @@
 use App\Http\Controllers\Api\AtencionDescansoController;
 use App\Http\Controllers\Api\AutenticacionController;
 use App\Http\Controllers\Api\DescansoMedicoController;
-use App\Http\Controllers\Api\UbigeoController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\EnfermedadController;
 use App\Http\Controllers\Api\EvidenciaController;
 use App\Http\Controllers\Api\SeguimientoController;
+use App\Http\Controllers\Api\UbigeoController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,14 +16,15 @@ use App\Http\Controllers\Api\SeguimientoController;
 |--------------------------------------------------------------------------
 |
 | Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
+| routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group. Enjoy building your API!
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
+
 /* Route::get('/departamentosReniec', 'Api\DepartamentosController@departamentosReniec'); */
 Route::get('/departamentosReniec', [UbigeoController::class, 'departamentosReniec']);
 Route::get('/provinciasReniec', [UbigeoController::class, 'provinciasReniec']);
