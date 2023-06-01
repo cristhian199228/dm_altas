@@ -7,6 +7,8 @@ use App\Http\Controllers\Api\UbigeoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\EnfermedadController;
+use App\Http\Controllers\Api\EvidenciaController;
+use App\Http\Controllers\Api\SeguimientoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,5 +36,7 @@ Route::post('/storeConsentimiento', [DescansoMedicoController::class, 'storeCons
 Route::post('/loginLugarNacimiento', [AutenticacionController::class, 'loginLugarNacimiento']);
 
 Route::apiResource('atencionDescanso', AtencionDescansoController::class);
+Route::apiResource('evidencias', EvidenciaController::class);
+Route::apiResource('seguimientos', SeguimientoController::class);
 
 Route::get('/enfermedades/search', [EnfermedadController::class, 'search']);

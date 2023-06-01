@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Models\Seguimiento;
+use App\Models\AtencionDescanso;
 
 return new class extends Migration
 {
@@ -12,9 +12,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('seguimiento_anammesis', function (Blueprint $table) {
+        Schema::create('atencion_anammesis', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Seguimiento::class)->constrained();
+            $table->foreignIdFor(AtencionDescanso::class)->constrained();
             $table->string('cie10', 20);
             $table->tinyInteger('principal');
             $table->timestamps();
@@ -27,5 +27,6 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('seguimiento_anammesis');
+        Schema::dropIfExists('anammesis');
     }
 };

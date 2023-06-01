@@ -34,6 +34,11 @@ class AtencionDescanso extends Model
 
     public function seguimientos(): HasMany
     {
-        return $this->hasMany(Seguimiento::class);
+        return $this->hasMany(Seguimiento::class)->latest('fecha_seguimiento');
+    }
+
+    public function anammesis() : HasMany
+    {
+        return $this->hasMany(Anammesis::class);
     }
 }

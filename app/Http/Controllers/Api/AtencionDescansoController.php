@@ -58,7 +58,7 @@ class AtencionDescansoController extends Controller
      */
     public function show(AtencionDescanso $atencionDescanso)
     {
-        return $atencionDescanso->load('descansosMedicos', 'paciente', 'evidencias', 'seguimientos');
+        return $atencionDescanso->load('descansosMedicos', 'paciente', 'evidencias', 'seguimientos', 'anammesis');
     }
 
     /**
@@ -76,17 +76,17 @@ class AtencionDescansoController extends Controller
 
         DB::transaction(function () use ($data, $atencionDescanso) {
             //Guardar paciente
-            /*$paciente = Paciente::findOrFail($data['paciente']['idpacientes']);
-            $paciente->celular = $data['paciente']['celular'];
-            $paciente->nro_registro = $data['paciente']['nro_registro'];
-            $paciente->save();*/
-
-            //Guardar seguimiento
-            $seguimiento = $atencionDescanso->seguimientos()->create($data['seguimiento']);
-            $seguimiento->anammesis()->createMany($data['anammesis']);
+            $atencionDescanso->paciente()->update([
+                "celular" => $data['paciente']['celular'],
+                "nro_registro" => $data['paciente']['nro_registro'],
+            ]);
+            $atencionDescanso->seguimientos()->create($data['seguimiento']);
+            $atencionDescanso->anammesis()->createMany($data['anammesis']);
         });
 
-       return $atencionDescanso->load('seguimientos.anammesis');
+        $atencionDescanso->refresh();
+
+        return $atencionDescanso;
     }
 
     /**

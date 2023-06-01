@@ -15,7 +15,6 @@ class Paciente extends Model
     protected $table = "pacientes";
     protected $primaryKey = "idpacientes";
     protected $appends = ['edad', 'full_name'];
-
     protected $guarded = [];
 
     public function validacionReniec(): HasOne
