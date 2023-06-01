@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AtencionDescansoController;
 use App\Http\Controllers\Api\AutenticacionController;
 use App\Http\Controllers\Api\DescansoMedicoController;
 use App\Http\Controllers\Api\UbigeoController;
+use App\Http\Controllers\Api\AtencionMedicaController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\EnfermedadController;
@@ -32,6 +33,8 @@ Route::post('/uploadDescansoMedico', [DescansoMedicoController::class, 'uploadDe
 Route::get('/showdm/{path}',  [DescansoMedicoController::class, 'show']);
 Route::get('/fetchDocumentosRequeridos', [DescansoMedicoController::class, 'fetchDocumentosRequeridos']);
 Route::post('/storeConsentimiento', [DescansoMedicoController::class, 'storeConsentimiento']);
+Route::get('/showConsentimientoPdf/{id}', [DescansoMedicoController::class, 'showConsentimientoPdf']);
+Route::get('/fetchAtencion/{id}', [AtencionMedicaController::class, 'fetchAtencion']);
 
 Route::post('/loginLugarNacimiento', [AutenticacionController::class, 'loginLugarNacimiento']);
 

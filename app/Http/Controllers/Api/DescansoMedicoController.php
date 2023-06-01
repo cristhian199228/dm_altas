@@ -87,4 +87,20 @@ class DescansoMedicoController extends Controller
         $foto->ruta = $unique_name;
         $foto->save(); */
     }
+    public function showConsentimientoPdf($id)
+    {
+       $consentimiento = Consentimiento::where('id',$id)
+       ->with('DescansoMedico')
+       ->get();
+        /*  $ficha = $ficha->load([
+            'PcrPruebaMolecular.PcrEnvioMunoz',
+            'PcrPruebaMolecular.envio',
+            'usuario'
+        ]);
+ */
+        //dd($ficha->Usuario);
+        $pdf = \PDF::loadView('pdf.ficha_ep', compact('consentimiento'));
+        $pdf->setPaper('letter', 'portrait');
+        return $pdf->stream('consentimiento.pdf');
+    }
 }
