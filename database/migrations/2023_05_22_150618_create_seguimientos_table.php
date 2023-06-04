@@ -14,14 +14,15 @@ return new class extends Migration
     {
         Schema::create('seguimientos', function (Blueprint $table) {
             $table->id();
-            $table->longtext('comunicacion');
+            $table->longtext('comunicacion')->nullable();
             $table->longtext('informacion_suministrada')->nullable();
             $table->datetime('fecha_inicio_sintomas')->nullable();
-            $table->tinyInteger('motivo_seguimiento');
+            $table->tinyInteger('motivo_seguimiento')->nullable();
             $table->text('motivo_seguimiento_otros')->nullable();
-            $table->tinyInteger('decision_medica');
-            $table->date('fecha_seguimiento');
+            $table->tinyInteger('decision_medica')->nullable();
+            $table->date('fecha_seguimiento')->nullable();
             $table->longText('comentarios')->nullable();
+            $table->tinyInteger('estado')->default(0);
             $table->foreignIdFor(AtencionDescanso::class)->constrained();
             $table->timestamps();
         });

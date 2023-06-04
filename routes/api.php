@@ -21,11 +21,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+    Route::apiResource('seguimientos', SeguimientoController::class);
 });
 
-/* Route::get('/departamentosReniec', 'Api\DepartamentosController@departamentosReniec'); */
 Route::get('/departamentosReniec', [UbigeoController::class, 'departamentosReniec']);
 Route::get('/provinciasReniec', [UbigeoController::class, 'provinciasReniec']);
 Route::get('/distritosReniec', [UbigeoController::class, 'distritosReniec']);
@@ -38,6 +40,6 @@ Route::post('/loginLugarNacimiento', [AutenticacionController::class, 'loginLuga
 
 Route::apiResource('atencionDescanso', AtencionDescansoController::class);
 Route::apiResource('evidencias', EvidenciaController::class);
-Route::apiResource('seguimientos', SeguimientoController::class);
+
 
 Route::get('/enfermedades/search', [EnfermedadController::class, 'search']);
