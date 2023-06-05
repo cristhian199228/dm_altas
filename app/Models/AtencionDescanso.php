@@ -16,6 +16,8 @@ class AtencionDescanso extends Model
         'created_at' => 'datetime:d/m/Y'
     ];
 
+    protected $guarded = [];
+
     public function descansosMedicos(): HasMany
     {
         return $this->hasMany(DescansoMedico::class)->latest('fecha_inicio');

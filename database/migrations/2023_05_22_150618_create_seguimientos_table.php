@@ -22,7 +22,7 @@ return new class extends Migration
             $table->tinyInteger('decision_medica')->nullable();
             $table->date('fecha_seguimiento')->nullable();
             $table->longText('comentarios')->nullable();
-            $table->tinyInteger('estado');
+            $table->tinyInteger('estado')->nullable();
             $table->foreignIdFor(AtencionDescanso::class)->constrained();
             $table->timestamps();
         });
