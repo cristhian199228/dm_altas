@@ -118,6 +118,12 @@ class AtencionDescansoController extends Controller
 
         //return $data;
 
+        if ($atencionDescanso->estado === 1) {
+            return response([
+                "message" => __('messages.error.tracing_discharge')
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
         DB::transaction(function () use ($data, $atencionDescanso) {
             $atencionDescanso->paciente()->update([
                 "celular" => $data['paciente']['celular'],
@@ -142,6 +148,7 @@ class AtencionDescansoController extends Controller
                     });
             }
 
+            //DECISION MEDICA: SEGUIMIENTO
             if($data['seguimiento']['decision_medica'] === 2) {
                 $atencionDescanso->seguimientos()->create([
                     "fecha_seguimiento" => $data['seguimiento']['fecha_proximo_seguimiento']
@@ -151,6 +158,10 @@ class AtencionDescansoController extends Controller
             $atencionDescanso->seguimientos()->where('id', $data['seguimiento']['id'])
                 ->update($data['seguimiento']);
 
+            //DECISION MEDICA: ALTA
+            if ($data['seguimiento']['decision_medica'] === 1) {
+                $atencionDescanso->update(["estado" => 1]);
+            }
         });
 
         $atencionDescanso->refresh();
