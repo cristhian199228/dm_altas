@@ -15,6 +15,7 @@ class AtencionMedicaController extends Controller
     {
         $atencion = AtencionDescanso::where('paciente_id', $id)
             ->with('DescansosMedicos.Consentimientos')
+            ->with('evidencias')
             ->get();
         return $atencion;
     }

@@ -37,6 +37,7 @@ Route::get('/showdm/{path}',  [DescansoMedicoController::class, 'show']);
 Route::get('/fetchDocumentosRequeridos', [DescansoMedicoController::class, 'fetchDocumentosRequeridos']);
 Route::post('/storeConsentimiento', [DescansoMedicoController::class, 'storeConsentimiento']);
 Route::post('/storeAtencion', [AtencionMedicaController::class, 'storeAtencion']);
+Route::get('/showImagen/{ruta}', [EvidenciaController::class, 'showImagen']);
 Route::get('/showConsentimientoPdf/{id}', [DescansoMedicoController::class, 'showConsentimientoPdf']);
 Route::get('/fetchAtencion/{id}', [AtencionMedicaController::class, 'fetchAtencion']);
 Route::post('/loginLugarNacimiento', [AutenticacionController::class, 'loginLugarNacimiento']);
