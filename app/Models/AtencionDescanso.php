@@ -18,7 +18,7 @@ class AtencionDescanso extends Model
 
     public function descansosMedicos(): HasMany
     {
-        return $this->hasMany(DescansoMedico::class);
+        return $this->hasMany(DescansoMedico::class)->latest('fecha_inicio');
     }
 
     public function ultimoDescansoMedico(): HasOne

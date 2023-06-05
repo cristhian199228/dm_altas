@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\AtencionDescanso;
 use App\Models\DescansoMedico;
+use App\Models\Seguimiento;
 
 class AtencionMedicaController extends Controller
 {
@@ -32,7 +33,13 @@ class AtencionMedicaController extends Controller
         $atencion->paciente_id  = $request['id_paciente'];
         $atencion->estado  = 0;
         $atencion->save();
+        
 
+        $seguimiento = new Seguimiento();
+        $seguimiento->atencion_descanso_id  = $atencion->id;
+        $seguimiento->fecha_seguimiento = date('Y-m-d');
+        $seguimiento->estado  = 0;
+        $seguimiento->save();
      /*    $descanso = new DescansoMedico();
         $descanso->atencion_descanso_id  = $atencion->id;
         $descanso->save();

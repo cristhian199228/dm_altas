@@ -2,15 +2,17 @@
 
 namespace App\Models;
 
+use AjCastro\Searchable\Searchable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 
 class Paciente extends Model
 {
-    use HasFactory;
+    use HasFactory, Searchable;
 
     protected $table = "pacientes";
     protected $primaryKey = "idpacientes";
@@ -21,6 +23,12 @@ class Paciente extends Model
     {
         return $this->hasOne(ValidacionReniec::class, 'id_paciente', 'idpacientes');
     }
+
+    public function contactosEmergencia(): HasMany
+    {
+        return $this->hasMany(ContactoEmergencia::class, 'paciente_id', 'idpacientes');
+    }
+
     protected function edad(): Attribute
     {
         return Attribute::make(

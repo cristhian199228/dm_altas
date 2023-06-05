@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\EvidenciaController;
 use App\Http\Controllers\Api\SeguimientoController;
 use App\Http\Controllers\Api\UbigeoController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,11 +23,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
 });
 
-/* Route::get('/departamentosReniec', 'Api\DepartamentosController@departamentosReniec'); */
 Route::get('/departamentosReniec', [UbigeoController::class, 'departamentosReniec']);
 Route::get('/provinciasReniec', [UbigeoController::class, 'provinciasReniec']);
 Route::get('/distritosReniec', [UbigeoController::class, 'distritosReniec']);
@@ -38,7 +40,27 @@ Route::post('/storeAtencion', [AtencionMedicaController::class, 'storeAtencion']
 Route::get('/showConsentimientoPdf/{id}', [DescansoMedicoController::class, 'showConsentimientoPdf']);
 Route::get('/fetchAtencion/{id}', [AtencionMedicaController::class, 'fetchAtencion']);
 Route::post('/loginLugarNacimiento', [AutenticacionController::class, 'loginLugarNacimiento']);
+
+Route::apiResource('seguimientos', SeguimientoController::class);
 Route::apiResource('atencionDescanso', AtencionDescansoController::class);
 Route::apiResource('evidencias', EvidenciaController::class);
-Route::apiResource('seguimientos', SeguimientoController::class);
+
+
 Route::get('/enfermedades/search', [EnfermedadController::class, 'search']);
+
+Route::get('/greeting/{locale}', function (string $locale) {
+    if (! in_array($locale, ['en', 'es'])) {
+        return response()->json([
+            "message" => __("messages.error.change_locale")
+        ], 404);
+    }
+    App::setLocale($locale);
+    session()->put('lang', $locale);
+    return response()->json([
+        "message" => __("messages.success.change_locale")
+    ]);
+});
+
+Route::get('/locale', function () {
+    return App::getLocale();
+});

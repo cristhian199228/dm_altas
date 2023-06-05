@@ -14,6 +14,7 @@ class DescansoMedico extends Model
         'fecha_inicio' => 'datetime:d/m/Y',
         'fecha_fin' => 'datetime:d/m/Y',
     ];
+    protected $guarded = [];
 
     public function Consentimientos()
     {
@@ -23,5 +24,9 @@ class DescansoMedico extends Model
     public function AtencionDescanso(): BelongsTo
     {
         return $this->belongsTo(AtencionDescanso::class);
+    }
+
+    public function enfermedad(): BelongsTo {
+        return $this->belongsTo(Enfermedad::class, 'cie10', 'cie10');
     }
 }
