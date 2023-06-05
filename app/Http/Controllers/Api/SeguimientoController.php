@@ -15,9 +15,16 @@ class SeguimientoController extends Controller
     public function index()
     {
         return Seguimiento::query()
+            ->when(request('queryPaciente'), function ($query) {
+                $query->whereHas('atencion.paciente', function ($q) {
+                    $q->search(request('queryPaciente'));
+                });
+            })->when(request('fechaSeguimiento'), function ($query) {
+                $query->whereDate('fecha_seguimiento', request('fechaSeguimiento'));
+            })
             ->with('atencion.paciente', 'atencion.ultimoDescansoMedico')
-            ->latest('fecha_seguimiento')
-            ->paginate(15);
+            ->latest()
+            ->paginate(request('itemsPerPage') ?? 10);
     }
 
     /**
@@ -33,7 +40,7 @@ class SeguimientoController extends Controller
      */
     public function show(Seguimiento $seguimiento)
     {
-        return $seguimiento->load('atencion.paciente');
+        return $seguimiento;
     }
 
     /**

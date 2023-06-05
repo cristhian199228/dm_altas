@@ -99,6 +99,7 @@ return [
     */
 
     'fallback_locale' => 'en',
+    'supported_languages' => ['en' => 'English', 'es' => 'Spanish'],
 
     /*
     |--------------------------------------------------------------------------
@@ -171,6 +172,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        Laraveles\Spanish\SpanishServiceProvider::class,
     ])->toArray(),
 
     /*

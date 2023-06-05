@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Consentimiento;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class DescansoMedico extends Model
 {
@@ -13,8 +14,14 @@ class DescansoMedico extends Model
         'fecha_inicio' => 'datetime:d/m/Y',
         'fecha_fin' => 'datetime:d/m/Y',
     ];
+    protected $guarded = [];
+
     public function Consentimientos()
     {
         return $this->hasMany(Consentimiento::class);
+    }
+
+    public function enfermedad(): BelongsTo {
+        return $this->belongsTo(Enfermedad::class, 'cie10', 'cie10');
     }
 }

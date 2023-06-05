@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Enums\DecisionMedica;
 use App\Http\Controllers\Controller;
+use App\Models\Anammesis;
 use App\Models\AtencionDescanso;
 use App\Models\Paciente;
 use App\Models\Seguimiento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\Response;
 
 class AtencionDescansoController extends Controller
 {
@@ -58,7 +60,12 @@ class AtencionDescansoController extends Controller
      */
     public function show(AtencionDescanso $atencionDescanso)
     {
-        return $atencionDescanso->load('descansosMedicos', 'paciente', 'evidencias', 'seguimientos', 'anammesis.enfermedad');
+        return $atencionDescanso
+            ->load('descansosMedicos.enfermedad',
+                'paciente.contactosEmergencia',
+                'evidencias',
+                'seguimientos',
+                'anammesis.enfermedad');
     }
 
     /**
@@ -70,23 +77,88 @@ class AtencionDescansoController extends Controller
         //Validar informacion
         $data = $request->validate([
             'paciente' => '',
-            'anammesis' => '',
-            'descansos' => ''
+
+            'anammesis.*.id' => '',
+            'anammesis.*.atencion_descanso_id' => '',
+            'anammesis.*.cie10' => 'required',
+            'anammesis.*.principal' => 'required',
+
+            'descansos' => '',
+
+            'seguimiento.id' => 'required',
+            'seguimiento.comunicacion' => 'required',
+            'seguimiento.informacion_suministrada' => 'required',
+            'seguimiento.fecha_inicio_sintomas' => '',
+            'seguimiento.motivo_seguimiento' => 'required',
+            'seguimiento.motivo_seguimiento_otros' => '',
+            'seguimiento.decision_medica' => 'required',
+            'seguimiento.fecha_seguimiento' => '',
+            'seguimiento.comentarios' => '',
+            'seguimiento.estado' => 'required',
+            'seguimiento.fecha_proximo_seguimiento' => '',
+
+            'descansos_medicos.*.id' => '',
+            'descansos_medicos.*.fecha_inicio' => '',
+            'descansos_medicos.*.fecha_fin' => '',
+            'descansos_medicos.*.ruta' => '',
+            'descansos_medicos.*.cie10' => '',
+            'descansos_medicos.*.numero_certificado' => '',
+            'descansos_medicos.*.medico_emisor' => '',
+            'descansos_medicos.*.cmp' => '',
+            'descansos_medicos.*.motivo' => '',
+            'descansos_medicos.*.centro_medico' => '',
+            'descansos_medicos.*.otros_centro_medico' => '',
+            'descansos_medicos.*.producto_intervencion_quirurgica' => '',
+            'descansos_medicos.*.establecimiento_intervencion_quirurgica' => '',
+            'descansos_medicos.*.otros_establecimiento_intervencion_quirurgica' => '',
+            'descansos_medicos.*.fecha_inicio_hospitalizacion' => '',
+            'descansos_medicos.*.fecha_fin_hospitalizacion' => '',
+            'descansos_medicos.*.atencion_descanso_id' => '',
         ]);
 
+        //return $data;
+
         DB::transaction(function () use ($data, $atencionDescanso) {
-            //Guardar paciente
             $atencionDescanso->paciente()->update([
                 "celular" => $data['paciente']['celular'],
                 "nro_registro" => $data['paciente']['nro_registro'],
             ]);
-            $atencionDescanso->anammesis()->createMany($data['anammesis']);
+            if (isset($data['anammesis']) && count($data['anammesis']) > 0) {
+                $idsAnammesisPersistidas = $atencionDescanso->anammesis()->get()->pluck('id');
+                $idsAnammesisRequest = collect($data['anammesis'])->pluck('id');
+                $idsAnammesisEliminar = $idsAnammesisPersistidas->diff($idsAnammesisRequest);
+
+                Anammesis::destroy($idsAnammesisEliminar);
+                collect($data['anammesis'])
+                    ->each(function ($am) use ($atencionDescanso) {
+                        $atencionDescanso->anammesis()->updateOrCreate(["id" => $am['id']], $am);
+                    });
+            }
+            if (isset($data['descansos_medicos']) && count($data['descansos_medicos']) > 0) {
+                collect($data['descansos_medicos'])
+                    ->each(function ($dm) use ($atencionDescanso) {
+                        $atencionDescanso->descansosMedicos()->where('id', $dm['id'])
+                            ->update($dm);
+                    });
+            }
+
+            if($data['seguimiento']['decision_medica'] === 2) {
+                $atencionDescanso->seguimientos()->create([
+                    "fecha_seguimiento" => $data['seguimiento']['fecha_proximo_seguimiento']
+                ]);
+            }
+            unset($data['seguimiento']['fecha_proximo_seguimiento']);
+            $atencionDescanso->seguimientos()->where('id', $data['seguimiento']['id'])
+                ->update($data['seguimiento']);
 
         });
 
         $atencionDescanso->refresh();
 
-        return $atencionDescanso;
+        return response()->json([
+           "data" => $atencionDescanso,
+           "message" => __('messages.success.updated')
+        ], Response::HTTP_OK);
     }
 
     /**
