@@ -90,8 +90,8 @@ class DescansoMedicoController extends Controller
     public function showConsentimientoPdf($id)
     {
        $consentimiento = Consentimiento::where('id',$id)
-       ->with('DescansoMedico')
-       ->get();
+       ->with('DescansoMedico.AtencionDescanso.paciente')
+       ->first();
         /*  $ficha = $ficha->load([
             'PcrPruebaMolecular.PcrEnvioMunoz',
             'PcrPruebaMolecular.envio',
@@ -99,7 +99,7 @@ class DescansoMedicoController extends Controller
         ]);
  */
         //dd($ficha->Usuario);
-        $pdf = \PDF::loadView('pdf.ficha_ep', compact('consentimiento'));
+        $pdf = \PDF::loadView('pdf.consentimiento', compact('consentimiento'));
         $pdf->setPaper('letter', 'portrait');
         return $pdf->stream('consentimiento.pdf');
     }
