@@ -40,7 +40,14 @@ Route::post('/storeAtencion', [AtencionMedicaController::class, 'storeAtencion']
 Route::get('/showImagen/{ruta}', [EvidenciaController::class, 'showImagen']);
 Route::get('/showConsentimientoPdf/{id}', [DescansoMedicoController::class, 'showConsentimientoPdf']);
 Route::get('/fetchAtencion/{id}', [AtencionMedicaController::class, 'fetchAtencion']);
+Route::get('/enviarCorreoBuenaSalud', [SeguimientoController::class, 'enviarCorreoBuenaSalud']);
+Route::get('/enviarCorreoReincorporacion', [SeguimientoController::class, 'enviarCorreoReincorporacion']);
+Route::get('/enviarCorreoNoPuedeLaborar', [SeguimientoController::class, 'enviarCorreoNoPuedeLaborar']);
+Route::get('/excelSeguimiento', [SeguimientoController::class, 'export']);
 Route::post('/loginLugarNacimiento', [AutenticacionController::class, 'loginLugarNacimiento']);
+
+
+
 
 Route::apiResource('seguimientos', SeguimientoController::class);
 Route::apiResource('atencionDescanso', AtencionDescansoController::class);

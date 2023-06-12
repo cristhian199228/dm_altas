@@ -45,7 +45,7 @@ class AtencionDescansoController extends Controller
         $atencion->estado  = 0;
         $atencion->save();
 
-        
+
 
         /*    $descanso = new DescansoMedico();
            $descanso->atencion_descanso_id  = $atencion->id;
@@ -63,11 +63,13 @@ class AtencionDescansoController extends Controller
     public function show(AtencionDescanso $atencionDescanso)
     {
         return $atencionDescanso
-            ->load('descansosMedicos.enfermedad',
+            ->load(
+                'descansosMedicos.enfermedad',
                 'paciente.contactosEmergencia',
                 'evidencias',
                 'seguimientos',
-                'anammesis.enfermedad');
+                'anammesis.enfermedad'
+            );
     }
 
     /**
@@ -96,7 +98,7 @@ class AtencionDescansoController extends Controller
             'seguimiento.decision_medica' => 'required',
             'seguimiento.fecha_seguimiento' => '',
             'seguimiento.comentarios' => '',
-            'seguimiento.estado' => 'required',
+           /*  'seguimiento.estado' => 'required', */
             'seguimiento.fecha_proximo_seguimiento' => '',
 
             'descansos_medicos.*.id' => '',
@@ -126,7 +128,7 @@ class AtencionDescansoController extends Controller
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        DB::transaction(function () use ($data, $atencionDescanso) {
+        DB::transaction(function () use ($data, $atencionDescanso, $request) {
             $atencionDescanso->paciente()->update([
                 "celular" => $data['paciente']['celular'],
                 "nro_registro" => $data['paciente']['nro_registro'],
@@ -151,7 +153,7 @@ class AtencionDescansoController extends Controller
             }
 
             //DECISION MEDICA: SEGUIMIENTO
-            if($data['seguimiento']['decision_medica'] === 2) {
+            if ($data['seguimiento']['decision_medica'] === 2) {
                 $atencionDescanso->seguimientos()->create([
                     "fecha_seguimiento" => $data['seguimiento']['fecha_proximo_seguimiento']
                 ]);
@@ -159,6 +161,8 @@ class AtencionDescansoController extends Controller
             unset($data['seguimiento']['fecha_proximo_seguimiento']);
             $atencionDescanso->seguimientos()->where('id', $data['seguimiento']['id'])
                 ->update($data['seguimiento']);
+            $atencionDescanso->seguimientos()->where('id', $data['seguimiento']['id'])
+                ->update(["user_id" => $request->user()->id]);
 
             //DECISION MEDICA: ALTA
             if ($data['seguimiento']['decision_medica'] === 1) {
@@ -167,10 +171,10 @@ class AtencionDescansoController extends Controller
         });
 
         $atencionDescanso->refresh();
-
+        //return  $request->user()->id;
         return response()->json([
-           "data" => $atencionDescanso,
-           "message" => __('messages.success.updated')
+            "data" => $atencionDescanso,
+            "message" => __('messages.success.updated')
         ], Response::HTTP_OK);
     }
 

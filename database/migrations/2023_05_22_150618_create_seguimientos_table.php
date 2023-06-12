@@ -4,6 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use App\Models\AtencionDescanso;
+use App\Models\User;
 
 return new class extends Migration
 {
@@ -24,6 +25,7 @@ return new class extends Migration
             $table->longText('comentarios')->nullable();
             $table->tinyInteger('estado')->nullable();
             $table->foreignIdFor(AtencionDescanso::class)->constrained();
+            $table->unsignedInteger('user_id')->nullable();
             $table->timestamps();
         });
     }

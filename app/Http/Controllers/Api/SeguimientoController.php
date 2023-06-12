@@ -6,6 +6,12 @@ use App\Enums\DecisionMedica;
 use App\Http\Controllers\Controller;
 use App\Models\Seguimiento;
 use Illuminate\Http\Request;
+use App\Mail\MailBuenaSalud;
+use App\Mail\MailNoPuedeLaborar;
+use App\Mail\MailReincorporacion;
+use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\SeguimientoExport;
 
 class SeguimientoController extends Controller
 {
@@ -22,7 +28,7 @@ class SeguimientoController extends Controller
             })->when(request('fechaSeguimiento'), function ($query) {
                 $query->whereDate('fecha_seguimiento', request('fechaSeguimiento'));
             })
-            ->with('atencion.paciente', 'atencion.ultimoDescansoMedico')
+            ->with('atencion.paciente', 'atencion.ultimoDescansoMedico', 'user')
             ->latest()
             ->paginate(request('itemsPerPage') ?? 10);
     }
@@ -81,5 +87,60 @@ class SeguimientoController extends Controller
     public function destroy(Seguimiento $seguimiento)
     {
         //
+    }
+
+    public function enviarCorreoBuenaSalud()
+    {
+        $destinatario = 'cristhian.vargas@internationalsos.com';
+
+        Mail::to($destinatario)->send(new MailBuenaSalud());
+
+        return "Correo enviado correctamente.";
+    }
+
+    public function enviarCorreoPrimeraLlamada()
+    {
+        $destinatario = 'cristhian.vargas@internationalsos.com';
+
+        Mail::to($destinatario)->send(new MailBuenaSalud());
+
+        return "Correo enviado correctamente.";
+    }
+
+    public function enviarCorreoSegundaLlamada()
+    {
+        $destinatario = 'cristhian.vargas@internationalsos.com';
+
+        Mail::to($destinatario)->send(new MailBuenaSalud());
+
+        return "Correo enviado correctamente.";
+    }
+
+    public function enviarCorreoNoPuedeLaborar()
+    {
+        $destinatario = 'cristhian.vargas@internationalsos.com';
+
+        Mail::to($destinatario)->send(new MailNoPuedeLaborar());
+
+        return "Correo enviado correctamente.";
+    }
+
+    public function enviarCorreoReincorporacion()
+    {
+        $destinatario = 'cristhian.vargas@internationalsos.com';
+
+        Mail::to($destinatario)->send(new MailReincorporacion());
+
+        return "Correo enviado correctamente.";
+    }
+
+    public function export()
+    {
+        $seguimiento  = Seguimiento::with('atencion.paciente')
+        ->with('atencion.descansosMedicos')
+        ->with('atencion.ultimoDescansoMedico')
+        ->get();
+        //dd($seguimiento);
+        return Excel::download(new SeguimientoExport($seguimiento), 'users.xlsx');
     }
 }

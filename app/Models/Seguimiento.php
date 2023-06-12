@@ -15,4 +15,8 @@ class Seguimiento extends Model
     {
         return $this->belongsTo(AtencionDescanso::class, 'atencion_descanso_id', 'id');
     }
+    public function user() : BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }
