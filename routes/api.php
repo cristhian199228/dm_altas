@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\EnfermedadController;
 use App\Http\Controllers\Api\EvidenciaController;
 use App\Http\Controllers\Api\SeguimientoController;
 use App\Http\Controllers\Api\UbigeoController;
+use App\Http\Controllers\Api\AtencionMedicamentoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
@@ -40,14 +41,18 @@ Route::post('/storeAtencion', [AtencionMedicaController::class, 'storeAtencion']
 Route::get('/showImagen/{ruta}', [EvidenciaController::class, 'showImagen']);
 Route::get('/showConsentimientoPdf/{id}', [DescansoMedicoController::class, 'showConsentimientoPdf']);
 Route::get('/fetchAtencion/{id}', [AtencionMedicaController::class, 'fetchAtencion']);
+Route::get('/fetchMedicamento/{id}', [AtencionMedicamentoController::class, 'fetchAtencion']);
 Route::get('/enviarCorreoBuenaSalud', [SeguimientoController::class, 'enviarCorreoBuenaSalud']);
 Route::get('/enviarCorreoReincorporacion', [SeguimientoController::class, 'enviarCorreoReincorporacion']);
 Route::get('/enviarCorreoNoPuedeLaborar', [SeguimientoController::class, 'enviarCorreoNoPuedeLaborar']);
 Route::get('/excelSeguimiento', [SeguimientoController::class, 'export']);
 Route::post('/loginLugarNacimiento', [AutenticacionController::class, 'loginLugarNacimiento']);
-
-
-
+Route::post('/evidenciasMedicamento', [AtencionMedicamentoController::class, 'uploadEvidencia']);
+Route::post('/storeMedicamento', [AtencionMedicamentoController::class, 'storeMedicamento']);
+Route::post('/searchMedicamento', [AtencionMedicamentoController::class, 'searchMedicamento']);
+Route::post('/storeMedicamentoAtencion', [AtencionMedicamentoController::class, 'storeMedicamentoAtencion']);
+Route::get('/fetchTablaMedicamentos/{id}', [AtencionMedicamentoController::class, 'fetchTablaMedicamentos']);
+Route::post('/eliminarMedicamento', [AtencionMedicamentoController::class, 'eliminarMedicamento']);
 
 Route::apiResource('seguimientos', SeguimientoController::class);
 Route::apiResource('atencionDescanso', AtencionDescansoController::class);
