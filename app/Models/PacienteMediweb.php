@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class PacienteMediweb extends Model
 {
     use HasFactory;
+    protected $connection = 'mediweb';
+    protected $table = 'paciente';
 }

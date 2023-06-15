@@ -92,7 +92,18 @@ return [
             // 'encrypt' => env('DB_ENCRYPT', 'yes'),
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
-
+        
+        'mediweb' => [
+            'driver'     => 'mysql',
+            'host'       => env('MEDIWEB_HOST', 'localhost'),
+            'database'   => env('MEDIWEB_DATABASE', 'forge'),
+            'username'   => env('MEDIWEB_USERNAME', 'forge'),
+            'password'   => env('MEDIWEB_PASSWORD', ''),
+            'charset'    => 'utf8',
+            'collation'  => 'utf8_unicode_ci',
+            'prefix'     => '',
+            'strict'     => false,
+        ],
     ],
 
     /*
@@ -125,7 +136,7 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_') . '_database_'),
         ],
 
         'default' => [

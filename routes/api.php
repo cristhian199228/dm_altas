@@ -54,6 +54,10 @@ Route::post('/storeMedicamentoAtencion', [AtencionMedicamentoController::class, 
 Route::get('/fetchTablaMedicamentos/{id}', [AtencionMedicamentoController::class, 'fetchTablaMedicamentos']);
 Route::post('/eliminarMedicamento', [AtencionMedicamentoController::class, 'eliminarMedicamento']);
 
+/* Route::post('/loginInvitados', [AtencionMedicamentoController::class, 'eliminarMedicamento']); */
+
+
+
 Route::apiResource('seguimientos', SeguimientoController::class);
 Route::apiResource('atencionDescanso', AtencionDescansoController::class);
 Route::apiResource('evidencias', EvidenciaController::class);

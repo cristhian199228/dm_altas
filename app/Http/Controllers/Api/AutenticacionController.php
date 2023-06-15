@@ -3,11 +3,15 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\ComprobanteMediweb;
+use App\Models\Empresa;
+use App\Models\EmpresaMediweb;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use App\Models\Paciente;
+use App\Models\PacienteMediweb;
 use App\Service\RegistroPacienteService;
 
 class AutenticacionController extends Controller
@@ -85,15 +89,18 @@ class AutenticacionController extends Controller
 
         $paciente = Paciente::firstWhere("numero_documento", $data['numero']);
         if (!$paciente) {
-            $paciente_mediweb = Paciente::select('idpaciente', 'dni2', 'nombres', 'apellido_paterno', 'apellido_materno', 'idtipodocumento', 'telefono', 'fechanacimiento', 'sexo', 'idempresa')
+            $paciente_mediweb = PacienteMediweb::select('idpaciente', 'dni2', 'nombres', 'apellido_paterno', 'apellido_materno', 'idtipodocumento', 'telefono', 'fechanacimiento', 'sexo', 'idempresa')
                 ->where('dni2',  $data['numero'])->first();
-            $comprobante_mediweb = Comprobante::select('idsubcontrata')
+            $comprobante_mediweb = ComprobanteMediweb::select('idsubcontrata')
                 ->where('idpaciente', $paciente_mediweb->idpaciente)->orderBy('fecha', 'desc')->first();
             $empresa_mediweb = EmpresaMediweb::select('descripcion', 'ruc', 'nombrecomercial')
                 ->where('idempresa',  $comprobante_mediweb->idsubcontrata)->first();
-            $empresa = Empresa::where('ruc', $empresa_mediweb->ruc)->first();
+            $idempresa = $comprobante_mediweb->idsubcontrata;
+            if ($comprobante_mediweb->idsubcontrata == '') $idempresa = 7;
 
-            $paciente = new PacienteIsos();
+            /*  $empresa = Empresa::where('ruc', $empresa_mediweb->ruc)->first(); */
+
+            $paciente = new Paciente();
             $paciente->estado = 1;
             $paciente->celular =  $paciente_mediweb->telefono;
             $paciente->nombres = $paciente_mediweb->nombres;
@@ -102,7 +109,8 @@ class AutenticacionController extends Controller
             $paciente->tipo_documento = $paciente_mediweb->idtipodocumento;
             $paciente->numero_documento = $paciente_mediweb->dni2;
             $paciente->fecha_nacimiento = $paciente_mediweb->fechanacimiento;
-            $paciente->idempresa = $comprobante_mediweb->idsubcontrata;
+            $paciente->idempresa = $idempresa;
+            $paciente->sexo =  $paciente_mediweb->sexo;
             $paciente->save();
         }
 
