@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\EvidenciaController;
 use App\Http\Controllers\Api\SeguimientoController;
 use App\Http\Controllers\Api\UbigeoController;
 use App\Http\Controllers\Api\AtencionMedicamentoController;
+use App\Http\Controllers\Api\PacienteController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
@@ -47,14 +48,22 @@ Route::get('/enviarCorreoReincorporacion', [SeguimientoController::class, 'envia
 Route::get('/enviarCorreoNoPuedeLaborar', [SeguimientoController::class, 'enviarCorreoNoPuedeLaborar']);
 Route::get('/excelSeguimiento', [SeguimientoController::class, 'export']);
 Route::post('/loginLugarNacimiento', [AutenticacionController::class, 'loginLugarNacimiento']);
+Route::post('/loginFechaNacimiento', [AutenticacionController::class, 'loginFechaNacimiento']);
+Route::post('/loginInvitados', [AutenticacionController::class, 'loginInvitados']);
+
+
+
 Route::post('/evidenciasMedicamento', [AtencionMedicamentoController::class, 'uploadEvidencia']);
 Route::post('/storeMedicamento', [AtencionMedicamentoController::class, 'storeMedicamento']);
 Route::post('/searchMedicamento', [AtencionMedicamentoController::class, 'searchMedicamento']);
 Route::post('/storeMedicamentoAtencion', [AtencionMedicamentoController::class, 'storeMedicamentoAtencion']);
 Route::get('/fetchTablaMedicamentos/{id}', [AtencionMedicamentoController::class, 'fetchTablaMedicamentos']);
 Route::post('/eliminarMedicamento', [AtencionMedicamentoController::class, 'eliminarMedicamento']);
+Route::post('/cambiarTieneReceta', [AtencionMedicamentoController::class, 'cambiarTieneReceta']);
 
-/* Route::post('/loginInvitados', [AtencionMedicamentoController::class, 'eliminarMedicamento']); */
+
+
+Route::post('/storeDatosPaciente', [PacienteController::class, 'store']);
 
 
 
@@ -66,7 +75,7 @@ Route::apiResource('evidencias', EvidenciaController::class);
 Route::get('/enfermedades/search', [EnfermedadController::class, 'search']);
 
 Route::get('/greeting/{locale}', function (string $locale) {
-    if (! in_array($locale, ['en', 'es'])) {
+    if (!in_array($locale, ['en', 'es'])) {
         return response()->json([
             "message" => __("messages.error.change_locale")
         ], 404);

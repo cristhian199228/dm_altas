@@ -63,7 +63,7 @@ class AtencionMedicamentoController extends Controller
             ->first();
         if ($atencion_proceso) {
             return response([
-                "message" => "Existe una Atencion en proceso"
+                "message" => "Existe una Declaración en Proceso"
             ]);
         }
 
@@ -73,7 +73,7 @@ class AtencionMedicamentoController extends Controller
         $atencion->save();
 
         return response([
-            "message" => "Atencion Creada Exitosamente",
+            "message" => "Declaracion Creada Exitosamente",
             "data" => $atencion
         ]);
     }
@@ -85,13 +85,13 @@ class AtencionMedicamentoController extends Controller
     public function storeMedicamentoAtencion(Request $request)
     {
         $atencion = AtencionMedicamento::find($request->id_atencion);
-        if (!is_null($request->id_medicamento))$atencion->medicamento()->attach($request->id_medicamento);
-        if (is_null($request->id_medicamento)){
+        if (!is_null($request->id_medicamento)) $atencion->medicamento()->attach($request->id_medicamento);
+        if (is_null($request->id_medicamento)) {
             $medicamento = new Medicamento();
-            $medicamento->descripcion=$request->medicamento_string;
+            $medicamento->descripcion = $request->medicamento_string;
             $medicamento->reportable = 0;
             $medicamento->save();
-            $atencion->medicamento()->attach( $medicamento->id);
+            $atencion->medicamento()->attach($medicamento->id);
         }
 
         return response([
@@ -112,5 +112,10 @@ class AtencionMedicamentoController extends Controller
         return response([
             "message" => "Medicamento Eliminado Exitosamente"
         ]);
+    }
+    public function cambiarTieneReceta(Request $request)
+    {
+        $atencion = AtencionMedicamento::find($request->id_atencion);
+        $atencion->medicamento()->updateExistingPivot($request->id_medicamento, ['tiene_receta' => $request->tiene_receta]);
     }
 }

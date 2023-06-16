@@ -67,7 +67,7 @@ class AutenticacionController extends Controller
 
             return response([
                 "message" => "Paciente validado correctamente!!",
-                "data" => $pacienteLocal->first()
+                "data" => $pacienteLocal->with('contactosEmergencia')->first()
             ]);
         }
 
@@ -127,6 +127,115 @@ class AutenticacionController extends Controller
         return response([
             "message" => "Paciente validado correctamente",
             "data" => $paciente
+        ]);
+    }
+
+    public function loginFechaNacimiento(Request $request)
+    {
+        $data = $request->validate([
+            'fecha_nacimiento' => 'required|date_format:Y-m-d',
+            'numero_documento' => 'required'
+        ]);
+        $pacienteLocal = Paciente::query()
+            ->where('numero_documento', $data['numero_documento'])
+            ->where('fecha_nacimiento', $data['fecha_nacimiento']);
+
+        if (!$pacienteLocal->exists()) {
+            $paciente_mediweb = PacienteMediweb::select('idpaciente', 'dni2', 'nombres', 'apellido_paterno', 'apellido_materno', 'idtipodocumento', 'telefono', 'fechanacimiento', 'sexo', 'idempresa')
+                ->where('dni2',  $data['numero_documento'])
+                ->where('fechanacimiento', $data['fecha_nacimiento'])
+                ->where('idtipodocumento', '<>', 1)
+                ->first();
+            $comprobante_mediweb = ComprobanteMediweb::select('idsubcontrata')
+                ->where('idpaciente', $paciente_mediweb->idpaciente)->orderBy('fecha', 'desc')->first();
+            $empresa_mediweb = EmpresaMediweb::select('descripcion', 'ruc', 'nombrecomercial')
+                ->where('idempresa',  $comprobante_mediweb->idsubcontrata)->first();
+            $idempresa = $comprobante_mediweb->idsubcontrata;
+            if ($comprobante_mediweb->idsubcontrata == '') $idempresa = 7;
+
+            $paciente = new Paciente();
+            $paciente->estado = 1;
+            $paciente->celular =  $paciente_mediweb->telefono;
+            $paciente->nombres = $paciente_mediweb->nombres;
+            $paciente->apellido_paterno = $paciente_mediweb->apellido_paterno;
+            $paciente->apellido_materno = $paciente_mediweb->apellido_materno;
+            $paciente->tipo_documento = $paciente_mediweb->idtipodocumento;
+            $paciente->numero_documento = $paciente_mediweb->dni2;
+            $paciente->fecha_nacimiento = $paciente_mediweb->fechanacimiento;
+            $paciente->idempresa = $idempresa;
+            $paciente->sexo =  $paciente_mediweb->sexo;
+            $paciente->save();
+
+            if (!$paciente->exists()) {
+                return response([
+                    "message" => "Documento y/o fecha de nacimiento incorrectos"
+                ], 400);
+            }
+
+            return response([
+                "message" => "Datos validados correctamente",
+                "data" => $paciente
+            ]);
+        }
+
+        return response([
+            "message" => "Datos validados correctamente",
+            "data" => $pacienteLocal->with('contactosEmergencia')->first()
+        ]);
+    }
+    public function loginInvitados(Request $request)
+    {
+        $data = $request->validate([
+            'numero_documento' => 'required',
+            "fecha_nacimiento" => 'required',
+            "ubigeo" => 'required',
+        ]);
+        $pacienteLocal = Paciente::query()
+            ->where('numero_documento', $data['numero_documento'])
+            ->where('fecha_nacimiento', $data['fecha_nacimiento'])
+            /* ->where('ubigeo_nacimiento', $data['ubigeo']) */;
+
+        if (!$pacienteLocal->exists()) {
+            $paciente_mediweb = PacienteMediweb::select('idpaciente', 'dni2', 'nombres', 'apellido_paterno', 'apellido_materno', 'idtipodocumento', 'telefono', 'fechanacimiento', 'sexo', 'idempresa')
+                ->where('dni2',  $data['numero_documento'])
+                ->where('fechanacimiento', $data['fecha_nacimiento'])
+                ->where('iddistrito2', $data['ubigeo'])
+                ->first();
+            $comprobante_mediweb = ComprobanteMediweb::select('idsubcontrata')
+                ->where('idpaciente', $paciente_mediweb->idpaciente)->orderBy('fecha', 'desc')->first();
+            $empresa_mediweb = EmpresaMediweb::select('descripcion', 'ruc', 'nombrecomercial')
+                ->where('idempresa',  $comprobante_mediweb->idsubcontrata)->first();
+            $idempresa = $comprobante_mediweb->idsubcontrata;
+            if ($comprobante_mediweb->idsubcontrata == '') $idempresa = 7;
+
+            $paciente = new Paciente();
+            $paciente->estado = 1;
+            $paciente->celular =  $paciente_mediweb->telefono;
+            $paciente->nombres = $paciente_mediweb->nombres;
+            $paciente->apellido_paterno = $paciente_mediweb->apellido_paterno;
+            $paciente->apellido_materno = $paciente_mediweb->apellido_materno;
+            $paciente->tipo_documento = $paciente_mediweb->idtipodocumento;
+            $paciente->numero_documento = $paciente_mediweb->dni2;
+            $paciente->fecha_nacimiento = $paciente_mediweb->fechanacimiento;
+            $paciente->idempresa = $idempresa;
+            $paciente->sexo =  $paciente_mediweb->sexo;
+            $paciente->save();
+
+            if (!$paciente->exists()) {
+                return response([
+                    "message" => "Documento y/o fecha de nacimiento incorrectos"
+                ], 400);
+            }
+
+            return response([
+                "message" => "Datos validados correctamente",
+                "data" => $paciente
+            ]);
+        }
+
+        return response([
+            "message" => "Datos validados correctamente",
+            "data" => $pacienteLocal->with('contactosEmergencia')->first()
         ]);
     }
 }
