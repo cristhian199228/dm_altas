@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\SeguimientoController;
 use App\Http\Controllers\Api\UbigeoController;
 use App\Http\Controllers\Api\AtencionMedicamentoController;
 use App\Http\Controllers\Api\PacienteController;
+use App\Models\AtencionMedicamento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
@@ -25,7 +26,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
@@ -42,17 +43,24 @@ Route::post('/storeAtencion', [AtencionMedicaController::class, 'storeAtencion']
 Route::get('/showImagen/{ruta}', [EvidenciaController::class, 'showImagen']);
 Route::get('/showConsentimientoPdf/{id}', [DescansoMedicoController::class, 'showConsentimientoPdf']);
 Route::get('/fetchAtencion/{id}', [AtencionMedicaController::class, 'fetchAtencion']);
-Route::get('/fetchMedicamento/{id}', [AtencionMedicamentoController::class, 'fetchAtencion']);
+
 Route::get('/enviarCorreoBuenaSalud', [SeguimientoController::class, 'enviarCorreoBuenaSalud']);
 Route::get('/enviarCorreoReincorporacion', [SeguimientoController::class, 'enviarCorreoReincorporacion']);
 Route::get('/enviarCorreoNoPuedeLaborar', [SeguimientoController::class, 'enviarCorreoNoPuedeLaborar']);
 Route::get('/excelSeguimiento', [SeguimientoController::class, 'export']);
+Route::get('/excelAtencionMedicamentos', [AtencionMedicamentoController::class, 'export']);
+
+
+
+
 Route::post('/loginLugarNacimiento', [AutenticacionController::class, 'loginLugarNacimiento']);
 Route::post('/loginFechaNacimiento', [AutenticacionController::class, 'loginFechaNacimiento']);
 Route::post('/loginInvitados', [AutenticacionController::class, 'loginInvitados']);
 
 
 
+Route::get('/fetchAtencionMedicamento', [AtencionMedicamentoController::class, 'fetchAtencionMedicamento']);
+Route::get('/fetchMedicamento/{id}', [AtencionMedicamentoController::class, 'fetchAtencion']);
 Route::post('/evidenciasMedicamento', [AtencionMedicamentoController::class, 'uploadEvidencia']);
 Route::post('/storeMedicamento', [AtencionMedicamentoController::class, 'storeMedicamento']);
 Route::post('/searchMedicamento', [AtencionMedicamentoController::class, 'searchMedicamento']);

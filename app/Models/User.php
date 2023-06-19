@@ -57,4 +57,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Seguimiento::class);
     }
+
+    public function atencionMedicamento(): HasMany
+    {
+        return $this->hasMany(AtencionMedicamento::class);
+    }
 }

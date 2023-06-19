@@ -10,6 +10,10 @@ use App\Models\Medicamento;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\SeguimientoExport;
+use App\Exports\AtencionMedicamentoExport;
+use App\Models\Seguimiento;
 
 class AtencionMedicamentoController extends Controller
 {
@@ -20,6 +24,17 @@ class AtencionMedicamentoController extends Controller
             ->with('evidencias')
             ->with('paciente')
             ->get();
+        return $medicamento;
+    }
+
+    public function fetchAtencionMedicamento()
+    {
+        $medicamento = AtencionMedicamento::query()
+            ->with('evidencias')
+            ->with('paciente')
+            ->with('medicamento')
+            ->latest()
+            ->paginate(request('itemsPerPage') ?? 10);
         return $medicamento;
     }
 
@@ -117,5 +132,22 @@ class AtencionMedicamentoController extends Controller
     {
         $atencion = AtencionMedicamento::find($request->id_atencion);
         $atencion->medicamento()->updateExistingPivot($request->id_medicamento, ['tiene_receta' => $request->tiene_receta]);
+    }
+    public function export()
+    {
+        $medicamento = AtencionMedicamento::with('evidencias')
+            ->with('paciente')
+            ->with('medicamento')
+            ->get();
+
+        foreach ($medicamento as $medicamentos) {
+            $arr = [];
+            foreach ($medicamentos->medicamento as $med) {
+                array_push($arr, $med->descripcion . '(' . ($med->reportable ? 'REPORTABLE':'NO REPORTABLE') . ',' .( $med->pivot->tiene_receta ? 'CON RECETA':'SIN RECETA') . ')');
+            }
+            $medicamentos->medicamentos_str = implode(", ", $arr);
+        }
+        //dd($medicamento);
+        return Excel::download(new AtencionMedicamentoExport($medicamento), 'medicamentos.xlsx');
     }
 }

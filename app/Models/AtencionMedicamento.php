@@ -26,4 +26,8 @@ class AtencionMedicamento extends Model
     {
         return $this->belongsToMany(Medicamento::class, 'atencion_medicamentos_atencion')->withPivot('tiene_receta');;
     }
+    public function user() : BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }
