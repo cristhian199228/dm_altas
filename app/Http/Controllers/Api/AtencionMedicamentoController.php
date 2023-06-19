@@ -138,16 +138,26 @@ class AtencionMedicamentoController extends Controller
         $medicamento = AtencionMedicamento::with('evidencias')
             ->with('paciente')
             ->with('medicamento')
+            ->with('Estacion.Sede')
+            ->with('user')
             ->get();
-
         foreach ($medicamento as $medicamentos) {
             $arr = [];
             foreach ($medicamentos->medicamento as $med) {
-                array_push($arr, $med->descripcion . '(' . ($med->reportable ? 'REPORTABLE':'NO REPORTABLE') . ',' .( $med->pivot->tiene_receta ? 'CON RECETA':'SIN RECETA') . ')');
+                array_push($arr, $med->descripcion . '(' . ($med->reportable ? 'REPORTABLE' : 'NO REPORTABLE') . ',' . ($med->pivot->tiene_receta ? 'CON RECETA' : 'SIN RECETA') . ')');
             }
             $medicamentos->medicamentos_str = implode(", ", $arr);
         }
         //dd($medicamento);
         return Excel::download(new AtencionMedicamentoExport($medicamento), 'medicamentos.xlsx');
+    }
+    public function saveCalificacion(Request $request)
+    {
+        $atencion = AtencionMedicamento::find($request->id_atencion);
+        $atencion->estado = $request->estado;
+        $atencion->estacion_id = $request->estacion_id['idestaciones'];
+        $atencion->user_id = $request->user()->id;
+        $atencion->save();
+        return $atencion;
     }
 }

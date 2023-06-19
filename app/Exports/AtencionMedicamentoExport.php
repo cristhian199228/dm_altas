@@ -34,7 +34,7 @@ class AtencionMedicamentoExport implements FromView, ShouldAutoSize, WithEvents,
         return [
             AfterSheet::class   => function (AfterSheet $event) {
                 // All headers - set font size to 14
-                $cellRange = 'B2:J3';
+                $cellRange = 'B2:K3';
                 $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setSize(14);
 
                 // Apply array of styles to B2:G8 cell range
@@ -48,7 +48,7 @@ class AtencionMedicamentoExport implements FromView, ShouldAutoSize, WithEvents,
                 ];
 
 
-                $event->sheet->getDelegate()->getStyle('B2:J3')->applyFromArray($styleArray);
+                $event->sheet->getDelegate()->getStyle('B2:K3')->applyFromArray($styleArray);
 
                 // Set first row to height 20
                 $event->sheet->getDelegate()->getRowDimension(1)->setRowHeight(50);
@@ -70,7 +70,7 @@ class AtencionMedicamentoExport implements FromView, ShouldAutoSize, WithEvents,
                 $event->sheet->getDelegate()->getColumnDimension('J')->setWidth("20");//rol
 
                 // Set A1:D4 range to wrap text in cells
-                $event->sheet->getDelegate()->getStyle('A1:J3')
+                $event->sheet->getDelegate()->getStyle('A1:K3')
                     ->getAlignment()->setWrapText(true);
             },
         ];

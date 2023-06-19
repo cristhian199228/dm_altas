@@ -30,4 +30,8 @@ class AtencionMedicamento extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function Estacion()
+    {
+        return $this->belongsTo(Estacion::class,'estacion_id');
+    }
 }

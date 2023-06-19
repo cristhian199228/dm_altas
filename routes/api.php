@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\EvidenciaController;
 use App\Http\Controllers\Api\SeguimientoController;
 use App\Http\Controllers\Api\UbigeoController;
 use App\Http\Controllers\Api\AtencionMedicamentoController;
+use App\Http\Controllers\Api\EstacionController;
 use App\Http\Controllers\Api\PacienteController;
 use App\Models\AtencionMedicamento;
 use Illuminate\Http\Request;
@@ -43,6 +44,7 @@ Route::post('/storeAtencion', [AtencionMedicaController::class, 'storeAtencion']
 Route::get('/showImagen/{ruta}', [EvidenciaController::class, 'showImagen']);
 Route::get('/showConsentimientoPdf/{id}', [DescansoMedicoController::class, 'showConsentimientoPdf']);
 Route::get('/fetchAtencion/{id}', [AtencionMedicaController::class, 'fetchAtencion']);
+Route::get('/fetchEstaciones', [EstacionController::class, 'fetchEstaciones']);
 
 Route::get('/enviarCorreoBuenaSalud', [SeguimientoController::class, 'enviarCorreoBuenaSalud']);
 Route::get('/enviarCorreoReincorporacion', [SeguimientoController::class, 'enviarCorreoReincorporacion']);
@@ -68,6 +70,7 @@ Route::post('/storeMedicamentoAtencion', [AtencionMedicamentoController::class, 
 Route::get('/fetchTablaMedicamentos/{id}', [AtencionMedicamentoController::class, 'fetchTablaMedicamentos']);
 Route::post('/eliminarMedicamento', [AtencionMedicamentoController::class, 'eliminarMedicamento']);
 Route::post('/cambiarTieneReceta', [AtencionMedicamentoController::class, 'cambiarTieneReceta']);
+Route::post('/saveCalificacion', [AtencionMedicamentoController::class, 'saveCalificacion']);
 
 
 

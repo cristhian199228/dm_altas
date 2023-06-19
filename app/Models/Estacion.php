@@ -13,7 +13,12 @@ class Estacion extends Model
 
     public function Sede()
     {
-        return $this->belongsTo('App\Sede','idsede');
+        return $this->belongsTo(Sede::class,'idsede');
+    }
+
+    public function AtencionMedicamento()
+    {
+        return $this->hasMany(AtencionMedicamento::class, 'id_estacion', 'idestaciones');
     }
     
 }
