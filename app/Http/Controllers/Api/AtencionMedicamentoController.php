@@ -29,13 +29,12 @@ class AtencionMedicamentoController extends Controller
 
     public function fetchAtencionMedicamento()
     {
-        $medicamento = AtencionMedicamento::query()
+        return AtencionMedicamento::query()
             ->with('evidencias')
             ->with('paciente')
             ->with('medicamento')
             ->latest()
-            ->paginate(request('itemsPerPage') ?? 10);
-        return $medicamento;
+            ->paginate(request('itemsPerPage') ?? 5);
     }
 
     public function uploadEvidencia(Request $request)

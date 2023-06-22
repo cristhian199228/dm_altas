@@ -11,9 +11,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class AtencionMedicamento extends Model
 {
     use HasFactory;
-    protected $casts = [
+    /* protected $casts = [
         'created_at' => 'datetime:d/m/Y'
-    ];
+    ]; */
     public function paciente(): BelongsTo
     {
         return $this->belongsTo(Paciente::class, 'paciente_id', 'idpacientes');
