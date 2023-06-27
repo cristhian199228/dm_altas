@@ -9,6 +9,7 @@
         <tr>
             <th></th>
             <th style="text-align:center;">FECHA</th>
+            <th style="text-align:center;">HORA</th>
             <th style="text-align:center;">SEDE</th>
             <th style="text-align:center;">POSTA</th>
             <th style="text-align:center;">MEDICO ASIGNADO</th>
@@ -18,6 +19,8 @@
             <th style="text-align:center;">CELULAR</th>
             <th style="text-align:center;">MEDICAMENTOS</th>
             <th style="text-align:center;">ESTADO</th>
+            <th style="text-align:center;">APTITUD</th>
+            <th style="text-align:center;">FECHA Y HORA DE CIERRE</th>
         </tr>
     </thead>
     <tbody>
@@ -25,7 +28,9 @@
         @foreach($medicamentos as $medicamento)
         <tr>
             <td></td>
-            <td style=" border: 2px solid black;text-align:center;">{{ $medicamento->created_at ? $medicamento->created_at :'' }}</td>
+            <td style=" border: 2px solid black;text-align:center;">{{ $medicamento->created_at ? $medicamento->created_at->format('d-m-Y') :'' }}</td>
+            <td style=" border: 2px solid black;text-align:center;">{{ $medicamento->created_at ? $medicamento->created_at->format('H:i:s') :'' }}</td>
+
             <td style=" border: 2px solid black;text-align:center;">{{ $medicamento->estacion && $medicamento->estacion->sede && $medicamento->estacion->sede->descripcion ? $medicamento->estacion->sede->descripcion:'' }}</td>
             <td style=" border: 2px solid black;text-align:center;">{{ $medicamento->estacion && $medicamento->estacion->nombre_estacion ? $medicamento->estacion->nombre_estacion:'' }}</td>
             <td style=" border: 2px solid black;text-align:center;">{{ strtoupper($medicamento->user && $medicamento->user->nombres) ? $medicamento->user->nombres:'' }} {{ strtoupper($medicamento->user && $medicamento->user->apellidos) ? $medicamento->user->apellidos:'' }}</td>
