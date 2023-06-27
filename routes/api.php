@@ -63,6 +63,7 @@ Route::post('/loginInvitados', [AutenticacionController::class, 'loginInvitados'
 
 Route::get('/fetchAtencionMedicamento', [AtencionMedicamentoController::class, 'fetchAtencionMedicamento']);
 Route::get('/fetchMedicamento/{id}', [AtencionMedicamentoController::class, 'fetchAtencion']);
+Route::get('/fetchMedicamentoPorId/{id}', [AtencionMedicamentoController::class, 'fetchAtencionPorId']);
 Route::post('/evidenciasMedicamento', [AtencionMedicamentoController::class, 'uploadEvidencia']);
 Route::post('/storeMedicamento', [AtencionMedicamentoController::class, 'storeMedicamento']);
 Route::post('/searchMedicamento', [AtencionMedicamentoController::class, 'searchMedicamento']);

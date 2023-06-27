@@ -27,6 +27,16 @@ class AtencionMedicamentoController extends Controller
         return $medicamento;
     }
 
+    public function fetchAtencionPorId($id)
+    {
+        $medicamento = AtencionMedicamento::where('id', $id)
+            ->with('evidencias')
+            ->with('paciente.contactosEmergencia')
+            ->with('medicamento')
+            ->first();
+        return $medicamento;
+    }
+
     public function fetchAtencionMedicamento()
     {
         return AtencionMedicamento::query()
@@ -153,8 +163,11 @@ class AtencionMedicamentoController extends Controller
     public function saveCalificacion(Request $request)
     {
         $atencion = AtencionMedicamento::find($request->id_atencion);
-        $atencion->estado = $request->estado;
-        $atencion->estacion_id = $request->estacion_id['idestaciones'];
+        $atencion->estado = $request->declaracion_medicamento['estado'];
+        $atencion->aptitud =  $request->declaracion_medicamento['aptitud'];
+        $atencion->observaciones =  $request->declaracion_medicamento['observaciones'];
+        $atencion->estacion_id =  $request->declaracion_medicamento['punto_atencion']['idestaciones'];
+        $atencion->closed_at = date('Y-m-d H:i:s');
         $atencion->user_id = $request->user()->id;
         $atencion->save();
         return $atencion;

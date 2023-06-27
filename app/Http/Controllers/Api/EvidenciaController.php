@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Intervention\Image\Facades\Image;
+use Response;
 
 class EvidenciaController extends Controller
 {
@@ -84,7 +85,14 @@ class EvidenciaController extends Controller
     {
         $file = '/DM_ALTAS/EV/' . $ruta;
         $file = Storage::disk('ftp')->get($file);
-
+        $pieces = explode(".", $ruta);
+        if($pieces[1] == "pdf"){
+            $filename = 'test.pdf';
+            return Response::make($file, 200, [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="'.$filename.'"'
+            ]);
+        }
         return Image::make($file)->response();
     }
 }
