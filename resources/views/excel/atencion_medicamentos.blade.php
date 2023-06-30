@@ -40,6 +40,8 @@
             <td style=" border: 2px solid black;text-align:center;">{{ $medicamento->paciente->celular ? $medicamento->paciente->celular:''}}</td>
             <td style=" border: 2px solid black;text-align:center;">{{ $medicamento->medicamentos_str ?  $medicamento->medicamentos_str:''}}</td>
             <td style=" border: 2px solid black;text-align:center;">{{ $medicamento->estado === 1 ? 'REVISADO':'EN REVISION' }}</td>
+            <td style=" border: 2px solid black;text-align:center;">{{ $medicamento->estado === 1 ? 'REVISADO':'EN REVISION' }}</td>
+            <td style=" border: 2px solid black;text-align:center;">{{ $medicamento->closed_at ? $medicamento->created_at->format('d-m-Y') :'' }}</td>
         </tr>
         @endforeach
     </tbody>
