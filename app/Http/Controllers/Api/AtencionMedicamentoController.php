@@ -162,11 +162,12 @@ class AtencionMedicamentoController extends Controller
     }
     public function saveCalificacion(Request $request)
     {
+        //return $request->declaracion_medicamento;
         $atencion = AtencionMedicamento::find($request->id_atencion);
         $atencion->estado = $request->declaracion_medicamento['estado'];
         $atencion->aptitud =  $request->declaracion_medicamento['aptitud'];
         $atencion->observaciones =  $request->declaracion_medicamento['observaciones'];
-        $atencion->estacion_id =  $request->declaracion_medicamento['punto_atencion']['idestaciones'];
+        $atencion->estacion_id =  $request->declaracion_medicamento['estacion_id'];
         $atencion->closed_at = date('Y-m-d H:i:s');
         $atencion->user_id = $request->user()->id;
         $atencion->save();
